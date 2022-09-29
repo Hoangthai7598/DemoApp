@@ -15,13 +15,13 @@ const UserItem = (props: UserItemProp) => {
                 style={styles.img}
                 source={{
                     uri: item.picture,
-                    priority: FastImage.priority.normal,
+                    priority: FastImage.priority.low,
                 }}
                 resizeMode={FastImage.resizeMode.contain}
             />
             <View style={styles.rightItem}>
-                <Text style={styles.idTxt}>{item.id}</Text>
-                <Text style={styles.nameTxt}>{item.title}. {item.firstName} {item.lastName}</Text>
+                <Text style={styles.idTxt} numberOfLines={1}>{item.id}</Text>
+                <Text style={styles.nameTxt} numberOfLines={1}>{item.title}. {item.firstName} {item.lastName}</Text>
             </View>
         </View>
     )
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default UserItem;
+export default React.memo(UserItem);
