@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React from "react";
 import { Button, StyleSheet, View, Switch } from "react-native";
 import { RootStackParamList } from "../../constant";
 import { changeActive } from "../../redux/Auth/authSlice";
@@ -20,8 +20,6 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
     const dispatch = useAppDispatch();
     const { isActive } = useAppSelector((state) => state.auth);
     const toggleSwitch = () => { dispatch(changeActive(!isActive)) };
-
-    console.log('actice',isActive);
 
     const listItem = [
         {

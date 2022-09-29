@@ -1,11 +1,17 @@
 import axios from "axios";
 import store from "../../store";
 
-const instance = axios.create({
-  baseURL: 'https://dummyapi.io/data/v1/',
-  timeout: 3000,
-  headers: { 'app-id': store.getState().auth.isActive ? '633410c907616a25b76ff87c' : '' }
-});
+const createAPI =  () => {
+  const { isActive } = store.getState().auth
+  const APIInstant = axios.create({
+    baseURL: 'https://dummyapi.io/data/v1/',
+    timeout: 3000,
+    headers: { 'app-id': isActive ? '633410c907616a25b76ff87c' : '' }
+  });
+  return APIInstant;
+}
+
+const instance = createAPI();
 
 function handleResult<T>(api: Promise<T>) {
   return api.then((res: any) => {
