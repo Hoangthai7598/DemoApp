@@ -1,7 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useCallback, useRef } from "react";
 import { Text, StyleSheet, TouchableOpacity, View, Alert } from "react-native";
-import { useDispatch } from "react-redux";
 import { RootStackParamList } from "../../constant";
 import { addProduct } from "../../redux/Product/productSlice";
 import { useAppDispatch } from "../../store";

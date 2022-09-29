@@ -10,9 +10,9 @@ const ProductItem = (props: ProductItemInterface) => {
     const { item } = props;
     return (
         <View style={[styles.boxShadow, styles.itemContainer]}>
-            <Text style={styles.idTxt} numberOfLines={1}>{item.name}</Text>
-            <Text style={styles.nameTxt} numberOfLines={1}>{item.description}</Text>
-            <Text style={styles.nameTxt} numberOfLines={1}>{item.price}</Text>
+            <Text style={styles.idTxt} numberOfLines={1}>Name: {item.name}</Text>
+            <Text style={styles.nameTxt} numberOfLines={1}>Description: {item.description}</Text>
+            <Text style={styles.nameTxt} numberOfLines={1}>Price {item.price} USD</Text>
         </View>
     )
 }

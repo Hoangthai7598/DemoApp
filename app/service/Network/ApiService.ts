@@ -1,10 +1,10 @@
 import axios from "axios";
-import { ResponseType } from "../../models/ResponseType";
+import store from "../../store";
 
 const instance = axios.create({
   baseURL: 'https://dummyapi.io/data/v1/',
   timeout: 3000,
-  headers: { 'app-id': '633410c907616a25b76ff87c' }
+  headers: { 'app-id': store.getState().auth.isActive ? '633410c907616a25b76ff87c' : '' }
 });
 
 function handleResult<T>(api: Promise<T>) {
