@@ -1,30 +1,37 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useRef } from 'react';
-import { Linking } from 'react-native';
+import React from 'react';
 import { SCREEN_ROUTER_APP } from '../constant';
-import HomeScreen from '../screens/Home/HomeScreen';
+import AddEditProductScreen from '../screens/AddEditProduct';
+import HomeScreen from '../screens/Home';
+import ProductListScreen from '../screens/ProductList';
+import UserListScreen from '../screens/UserList';
 
 const RootStack = createNativeStackNavigator();
 
 const {
-    HOME_SCREEN,
-    PRODUCT_SCREEN,
+    HOME,
+    USER_LIST,
+    PRODUCT_LIST,
     ADD_EDIT_PRODCUT_SCREEN
 } = SCREEN_ROUTER_APP
 
 const mainScreen = [
     {
-        name: HOME_SCREEN,
+        name: HOME,
         component: HomeScreen
     },
     {
-        name: PRODUCT_SCREEN,
-        component: HomeScreen
+        name: USER_LIST,
+        component: UserListScreen
+    },
+    {
+        name: PRODUCT_LIST,
+        component: ProductListScreen
     },
     {
         name: ADD_EDIT_PRODCUT_SCREEN,
-        component: HomeScreen
+        component: AddEditProductScreen
     }
 ];
 

@@ -1,13 +1,15 @@
 export const SCREEN_ROUTER_APP = {
-    HOME_SCREEN: 'HOME_SCREEN',
-    PRODUCT_SCREEN: 'SPLASH',
+    USER_LIST: 'USER_LIST',
+    PRODUCT_LIST: 'PRODUCT_LIST',
     ADD_EDIT_PRODCUT_SCREEN: "ADD_EDIT_PRODCUT_SCREEN",
+    HOME: 'HOME'
 }
 
 export type RootStackParamList = {
-    HOME_SCREEN: undefined,
-    PRODUCT_SCREEN: { id: string },
-    ADD_EDIT_PRODCUT_SCREEN: { id: string }
+    USER_LIST: undefined,
+    PRODUCT_LIST: undefined,
+    ADD_EDIT_PRODCUT_SCREEN: { id?: string },
+    HOME: undefined
 };
 
 export const LIMIT_ITEM_PER_PAGE = 10;

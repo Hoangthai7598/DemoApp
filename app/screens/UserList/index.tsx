@@ -8,9 +8,9 @@ import { wait } from "../../utils";
 import LoadingView from "../components/LoadingView";
 import UserItem from "./components/UserItem";
 
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'HOME_SCREEN'>;
+type UserListScreenProps = NativeStackScreenProps<RootStackParamList, 'USER_LIST'>;
 
-const HomeScreen = ({ route, navigation }: HomeScreenProps) => {
+const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
 
     const [listUser, setListUser] = useState<Array<UserItemResponseProps>>([]);
     const [pageIndex, setPageIndex] = useState(1);
@@ -92,6 +92,7 @@ const HomeScreen = ({ route, navigation }: HomeScreenProps) => {
                         offset: (60 + 20) * (index),  //  ( HEIGHT + (MARGIN_VERTICAL*2) ) * (index)
                         index,
                     })}
+                    maxToRenderPerBatch={10}
                     refreshing={refreshing}
                     onEndReached={onEndReached}
                     onRefresh={onRefresh}
@@ -107,7 +108,7 @@ const HomeScreen = ({ route, navigation }: HomeScreenProps) => {
     )
 }
 
-export default HomeScreen;
+export default UserListScreen;
 
 const renderUserItem = ({ item, index }: { item: UserItemResponseProps, index: number }) => {
     return <UserItem item={item} />
