@@ -8,8 +8,17 @@ const createAPI = () => {
   });
   return APIInstant;
 }
+const createAPINoKey = () => {
+  const APIInstant = axios.create({
+    baseURL: 'https://dummyapi.io/data/v1/',
+    timeout: 3000
+  });
+  return APIInstant;
+}
 
 const instance = createAPI();
+const instanceNoKey = createAPINoKey();
+
 
 function handleResult<T>(api: Promise<T>) {
   return api.then((res: any) => {
@@ -37,4 +46,16 @@ export const ApiClient = {
     handleResult(instance.patch(url, payload)),
   delete: (url: string, payload: object) =>
     handleResult(instance.delete(url, { data: payload })),
+}
+export const ApiClientNoKey = {
+  get: (url: string, payload: Object) =>
+    handleResult(instanceNoKey.get(url, payload)),
+  post: (url: string, payload: object) =>
+    handleResult(instanceNoKey.post(url, payload)),
+  put: (url: string, payload: object) =>
+    handleResult(instanceNoKey.put(url, payload)),
+  path: (url: string, payload: object) =>
+    handleResult(instanceNoKey.patch(url, payload)),
+  delete: (url: string, payload: object) =>
+    handleResult(instanceNoKey.delete(url, { data: payload })),
 }

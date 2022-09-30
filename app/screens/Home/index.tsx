@@ -1,9 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { Button, StyleSheet, View, Switch } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import { RootStackParamList } from "../../constant";
-import { changeActive } from "../../redux/Auth/authSlice";
-import { useAppDispatch, useAppSelector } from "../../store";
 
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'HOME'>;
@@ -16,10 +14,6 @@ interface itemProps {
 
 
 const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
-
-    const dispatch = useAppDispatch();
-    const { isActive } = useAppSelector((state) => state.auth);
-    const toggleSwitch = () => { dispatch(changeActive(!isActive)) };
 
     const listItem = [
         {
@@ -41,13 +35,6 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
 
     return (
         <View style={styles.container}>
-            <Switch
-                trackColor={{ false: "#767577", true: "#81b0ff" }}
-                thumbColor={isActive ? "#f5dd4b" : "#f4f3f4"}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
-                value={isActive}
-            />
             {listItem.map((item: itemProps) => {
                 return (
                     <View
