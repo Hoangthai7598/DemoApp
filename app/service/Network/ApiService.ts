@@ -1,12 +1,10 @@
 import axios from "axios";
-import store from "../../store";
 
-const createAPI =  () => {
-  const { isActive } = store.getState().auth
+const createAPI = () => {
   const APIInstant = axios.create({
     baseURL: 'https://dummyapi.io/data/v1/',
     timeout: 3000,
-    headers: { 'app-id': isActive ? '633410c907616a25b76ff87c' : '' }
+    headers: { 'app-id': '633410c907616a25b76ff87c' }
   });
   return APIInstant;
 }

@@ -9,7 +9,7 @@ let scriptHostname = 'localhost'
 
 if (DebugConfig.reactotron) {
   const scriptURL = NativeModules.SourceCode.scriptURL
-  scriptHostname = scriptURL.split('://')[1].split(':')[0]
+  scriptHostname = scriptURL?.split('://') ? scriptURL.split('://')[1].split(':')[0] : 'localhost'
 }
 
 let reactotron = ReactTron.configure({ host: scriptHostname })
@@ -22,7 +22,5 @@ let reactotron = ReactTron.configure({ host: scriptHostname })
     },
   })
   .connect()
-
-// console.log = ReactTron
 
 export default reactotron

@@ -18,7 +18,6 @@ const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
     const [isLoading, setLoading] = useState(true);
     const [isLoadingMore, setLoadingMore] = useState(false);
 
-
     const getListUser = useCallback(async () => {
         setLoading(true);
         setPageIndex(1);

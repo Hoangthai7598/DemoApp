@@ -5,12 +5,12 @@ import Reactotron from './config/ReactotronConfig'
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux'
 import DebugConfig from './config/DebugConfig'
 
-const enhancers = DebugConfig.reactotron ? [Reactotron.createEnhancer!()] : []
+// const enhancers = DebugConfig.reactotron ? [Reactotron.createEnhancer!()] : []
 
 const store = configureStore({
   reducer: RootReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware(),
-  enhancers,
+  // enhancers,
 })
 
 export type AppDispatch = typeof store.dispatch
