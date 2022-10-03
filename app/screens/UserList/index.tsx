@@ -1,43 +1,30 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
-import { LIMIT_ITEM_PER_PAGE, RootStackParamList } from "../../constant";
-import { ListUserResponse, UserItemResponseProps } from "../../models/User_Models";
-import { requestGetUserInfo } from "../../service/API/userAPI";
-import { wait } from "../../utils";
+import { FlatList, StyleSheet, View } from "react-native";
 import LoadingView from "../../components/LoadingView";
+import { RootStackParamList } from "../../constant";
+import { UserItemResponseProps } from "../../models/User_Models";
+import { fetchListUserAsync, fetchListUserMoreAsync } from "../../redux/User/userThunk";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { wait } from "../../utils";
 import UserItem from "./components/UserItem";
 
 type UserListScreenProps = NativeStackScreenProps<RootStackParamList, 'USER_LIST'>;
 
 const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
 
-    const [listUser, setListUser] = useState<Array<UserItemResponseProps>>([]);
-    const [pageIndex, setPageIndex] = useState(1);
-    const [totalPage, setTotalPage] = useState(1);
-    const [isLoading, setLoading] = useState(true);
-    const [isLoadingMore, setLoadingMore] = useState(false);
+    const { listUser, isLoading, pageIndex, totalPage, isLoadingMore } = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
 
     const getListUser = useCallback(async () => {
-        setLoading(true);
-        setPageIndex(1);
-        setListUser([]);
-        try {
-            const response: ListUserResponse = await (requestGetUserInfo({ page: 1, limit: LIMIT_ITEM_PER_PAGE }))
-            setListUser(response.data);
-            setLoading(false);
-            setTotalPage(Math.ceil(response.total / LIMIT_ITEM_PER_PAGE));
-        } catch (error) {
-            setLoading(false);
-            if (__DEV__) {
-                console.log('error load list user', error)
-            }
-        }
+        dispatch(fetchListUserAsync());
     }, []);
 
     useEffect(() => {
-        getListUser();
-    }, []);
+        if (listUser.length === 0) {
+            getListUser();
+        }
+    }, [listUser]);
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -51,25 +38,9 @@ const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
 
     const onEndReached = useCallback(() => {
         if (pageIndex <= totalPage) {
-            getListUserMore(pageIndex + 1);
-            setPageIndex(pageIndex + 1);
+            dispatch(fetchListUserMoreAsync(pageIndex + 1))
         }
-    }, [totalPage, pageIndex])
-
-    const getListUserMore = useCallback(async (nextPage: number) => {
-        setLoadingMore(true);
-        try {
-            const response: ListUserResponse = await (requestGetUserInfo({ page: nextPage, limit: LIMIT_ITEM_PER_PAGE }))
-            setListUser((prevState) => prevState.concat(response.data));
-            setLoadingMore(false);
-            setTotalPage(Math.ceil(response.total / LIMIT_ITEM_PER_PAGE));
-        } catch (error) {
-            setLoadingMore(false);
-            if (__DEV__) {
-                console.log('error load list user more', error)
-            }
-        }
-    }, [])
+    }, [pageIndex, totalPage])
 
     const listFooter = useCallback(() => {
         if (isLoadingMore) {

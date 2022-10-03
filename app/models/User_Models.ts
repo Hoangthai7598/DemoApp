@@ -7,7 +7,7 @@ export interface UserItemResponseProps {
 }
 
 export interface ListUserResponse {
-    data: Array<UserItemResponseProps>,
+    data: Array<UserItemResponseProps | any>,
     limit: number,
     page: number,
     total: number

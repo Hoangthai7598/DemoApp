@@ -1,58 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Switch, ActivityIndicator } from "react-native";
-import { UserItemFullResponseProps, UserItemResponseProps } from "../../../models/User_Models";
-import FastImage from 'react-native-fast-image'
-import { requestGetUserInfoFull } from "../../../service/API/userAPI";
+import React from "react";
+import { ActivityIndicator, StyleSheet, Switch, Text, View } from "react-native";
+import FastImage from 'react-native-fast-image';
+import { UserItemResponseProps } from "../../../models/User_Models";
+import { updateItem } from "../../../redux/User/userSlice";
+import { useAppDispatch } from "../../../store";
 
 interface UserItemProp {
-    item: UserItemResponseProps
+    item: UserItemResponseProps | any
 }
 
 const UserItem = (props: UserItemProp) => {
     const { item } = props;
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [userInfo, setUserInfo] = useState<UserItemFullResponseProps | null>();
-    const [loading, setLoading] = useState(false);
+    const dispatch = useAppDispatch();
     const toggleSwitch = () => {
-        setIsEnabled(previousState => !previousState);
-        if (isEnabled) {
-            setUserInfo(null);
-        }
-        else {
-            getFullData();
+        const newItem = { ...item };
+        if (item.enable) {
+            newItem.enable = false;
+            dispatch(updateItem(newItem));
+        } else {
+            newItem.enable = true;
+            dispatch(updateItem(newItem));
         }
     };
-
-    const getFullData = async () => {
-        setLoading(true);
-        try {
-            const response: UserItemFullResponseProps = await requestGetUserInfoFull(item.id);
-            setUserInfo(response);
-            setIsEnabled(true);
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
-            setIsEnabled(false);
-            if (__DEV__) {
-                console.log('error get full data', error);
-            }
-        }
-    }
-
-    useEffect(() => {
-        getFullData();
-    }, []);
-
-
     return (
         <View style={[styles.boxShadow, styles.containerView]}>
-            {loading ?
-                <View style={styles.loadingView}>
-                    <ActivityIndicator size='large' color='blue' />
-                </View>
-                :
-                null
-            }
             <View style={[styles.boxShadow, styles.itemContainer]}>
                 <FastImage
                     style={styles.img}
@@ -65,18 +36,18 @@ const UserItem = (props: UserItemProp) => {
                 <View style={styles.rightItem}>
                     <Text style={styles.idTxt} numberOfLines={1}>{item.id}</Text>
                     <Text style={styles.nameTxt} numberOfLines={1}>{item.title}. {item.firstName} {item.lastName}</Text>
-                    {userInfo?.email ?
-                        <Text style={styles.nameTxt}>Email: {userInfo?.email}</Text>
+                    {item.enable ?
+                        <Text style={styles.nameTxt}>Email: {item?.email}</Text>
                         :
                         <></>
                     }
                 </View>
                 <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                    thumbColor={item.enalble ? "#f5dd4b" : "#f4f3f4"}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
-                    value={isEnabled}
+                    value={item.enable}
                     style={{ margin: 5 }}
                 />
             </View>
