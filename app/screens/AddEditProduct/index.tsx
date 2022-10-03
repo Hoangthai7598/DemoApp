@@ -4,7 +4,7 @@ import { Text, StyleSheet, TouchableOpacity, View, Alert } from "react-native";
 import { RootStackParamList } from "../../constant";
 import { addProduct } from "../../redux/Product/productSlice";
 import { useAppDispatch } from "../../store";
-import MInput from "../components/MInput";
+import MInput from "../../components/MInput";
 
 
 type AddEditProductScreenProps = NativeStackScreenProps<RootStackParamList, 'ADD_EDIT_PRODCUT_SCREEN'>;

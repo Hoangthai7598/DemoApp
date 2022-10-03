@@ -1,9 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useCallback, useLayoutEffect } from "react";
-import { Button, FlatList, StyleSheet, View, Text } from "react-native";
+import { Button, FlatList, StyleSheet, View } from "react-native";
 import { RootStackParamList } from "../../constant";
 import { ProdcutItemProps } from "../../models/Product_Models";
-import { UserItemResponseProps } from "../../models/User_Models";
 import { useAppSelector } from "../../store";
 import ProductItem from "./components/ProductItem";
 

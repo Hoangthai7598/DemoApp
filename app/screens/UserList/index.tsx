@@ -5,7 +5,7 @@ import { LIMIT_ITEM_PER_PAGE, RootStackParamList } from "../../constant";
 import { ListUserResponse, UserItemResponseProps } from "../../models/User_Models";
 import { requestGetUserInfo } from "../../service/API/userAPI";
 import { wait } from "../../utils";
-import LoadingView from "../components/LoadingView";
+import LoadingView from "../../components/LoadingView";
 import UserItem from "./components/UserItem";
 
 type UserListScreenProps = NativeStackScreenProps<RootStackParamList, 'USER_LIST'>;
