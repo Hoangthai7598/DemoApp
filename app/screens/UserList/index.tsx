@@ -1,11 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View, FlatList, Switch, Text } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import { LIMIT_ITEM_PER_PAGE, RootStackParamList } from "../../constant";
 import { ListUserResponse, UserItemResponseProps } from "../../models/User_Models";
-import { changeActive } from "../../redux/Auth/authSlice";
-import { requestGetUserInfo, requestGetUserInfoNoKey } from "../../service/API/userAPI";
-import { useAppDispatch, useAppSelector } from "../../store";
+import { requestGetUserInfo } from "../../service/API/userAPI";
 import { wait } from "../../utils";
 import LoadingView from "../components/LoadingView";
 import UserItem from "./components/UserItem";
@@ -19,17 +17,13 @@ const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
     const [totalPage, setTotalPage] = useState(1);
     const [isLoading, setLoading] = useState(true);
     const [isLoadingMore, setLoadingMore] = useState(false);
-    const { isActive } = useAppSelector((state) => state.auth);
 
     const getListUser = useCallback(async () => {
         setLoading(true);
         setPageIndex(1);
         setListUser([]);
         try {
-            const response: ListUserResponse = await (isActive ?
-                requestGetUserInfo({ page: 1, limit: LIMIT_ITEM_PER_PAGE }) :
-                requestGetUserInfoNoKey({ page: 1, limit: LIMIT_ITEM_PER_PAGE, })
-            )
+            const response: ListUserResponse = await (requestGetUserInfo({ page: 1, limit: LIMIT_ITEM_PER_PAGE }))
             setListUser(response.data);
             setLoading(false);
             setTotalPage(Math.ceil(response.total / LIMIT_ITEM_PER_PAGE));
@@ -39,11 +33,11 @@ const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
                 console.log('error load list user', error)
             }
         }
-    }, [isActive]);
+    }, []);
 
     useEffect(() => {
         getListUser();
-    }, [isActive]);
+    }, []);
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -65,10 +59,7 @@ const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
     const getListUserMore = useCallback(async (nextPage: number) => {
         setLoadingMore(true);
         try {
-            const response: ListUserResponse = await (isActive ?
-                requestGetUserInfo({ page: nextPage, limit: LIMIT_ITEM_PER_PAGE })
-                :
-                requestGetUserInfoNoKey({ page: nextPage, limit: LIMIT_ITEM_PER_PAGE }))
+            const response: ListUserResponse = await (requestGetUserInfo({ page: nextPage, limit: LIMIT_ITEM_PER_PAGE }))
             setListUser((prevState) => prevState.concat(response.data));
             setLoadingMore(false);
             setTotalPage(Math.ceil(response.total / LIMIT_ITEM_PER_PAGE));
@@ -78,7 +69,7 @@ const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
                 console.log('error load list user more', error)
             }
         }
-    }, [isActive])
+    }, [])
 
     const listFooter = useCallback(() => {
         if (isLoadingMore) {
@@ -89,45 +80,29 @@ const UserListScreen = ({ route, navigation }: UserListScreenProps) => {
         return <></>
     }, [isLoadingMore]);
 
-    const dispatch = useAppDispatch();
-    const toggleSwitch = () => { dispatch(changeActive(!isActive)) };
-
     return (
         <View style={styles.container}>
             {isLoading ?
                 <LoadingView />
                 :
-                <View style={{ flex: 1 }}>
-                    <View style={styles.row}>
-                        <Switch
-                            trackColor={{ false: "#767577", true: "#81b0ff" }}
-                            thumbColor={isActive ? "#f5dd4b" : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch}
-                            value={isActive}
-                            style={{ margin: 10 }}
-                        />
-                        <Text style={styles.userStatus}>{isActive ? 'activation' : 'deactivation'}</Text>
-                    </View>
-                    <FlatList
-                        removeClippedSubviews
-                        getItemLayout={(_, index) => ({
-                            length: 60 + 20, //  HEIGHT + (MARGIN_VERTICAL * 2)
-                            offset: (60 + 20) * (index),  //  ( HEIGHT + (MARGIN_VERTICAL*2) ) * (index)
-                            index,
-                        })}
-                        maxToRenderPerBatch={10}
-                        refreshing={refreshing}
-                        onEndReached={onEndReached}
-                        onRefresh={onRefresh}
-                        style={styles.container}
-                        contentContainerStyle={{ paddingBottom: 100 }}
-                        data={listUser}
-                        ListFooterComponent={listFooter}
-                        keyExtractor={(item: UserItemResponseProps) => item.id}
-                        renderItem={renderUserItem}
-                    />
-                </View>
+                <FlatList
+                    removeClippedSubviews
+                    getItemLayout={(_, index) => ({
+                        length: 60 + 20, //  HEIGHT + (MARGIN_VERTICAL * 2)
+                        offset: (60 + 20) * (index),  //  ( HEIGHT + (MARGIN_VERTICAL*2) ) * (index)
+                        index,
+                    })}
+                    maxToRenderPerBatch={10}
+                    refreshing={refreshing}
+                    onEndReached={onEndReached}
+                    onRefresh={onRefresh}
+                    style={styles.container}
+                    contentContainerStyle={{ paddingBottom: 100 }}
+                    data={listUser}
+                    ListFooterComponent={listFooter}
+                    keyExtractor={(item: UserItemResponseProps) => item.id}
+                    renderItem={renderUserItem}
+                />
             }
         </View>
     )
@@ -143,13 +118,5 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff'
-    },
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    userStatus: {
-        fontSize: 14,
-        color: '#000'
     }
 })

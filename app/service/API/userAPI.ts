@@ -1,4 +1,4 @@
-import { ApiClient, ApiClientNoKey } from "../Network/ApiService"
+import { ApiClient } from "../Network/ApiService"
 
 export interface ListUserParamsProp {
     page?: number,
@@ -8,5 +8,5 @@ export interface ListUserParamsProp {
 export const requestGetUserInfo = (payload: ListUserParamsProp) =>
     ApiClient.get(`/user`, { params: payload });
 
-export const requestGetUserInfoNoKey = (payload: ListUserParamsProp) =>
-    ApiClientNoKey.get(`/user`, { params: payload });
+export const requestGetUserInfoFull = (id: string) =>
+    ApiClient.get(`/user/${id}`, {});
