@@ -34,17 +34,27 @@ export const fetchListUserAsync = createAsyncThunk(
 export const fetchListUserMoreAsync = createAsyncThunk(
     'user/fetchAllUsersMore',
     async (page: number) => {
-        const response: ListUserResponse = await requestGetUserInfo({ page, limit: LIMIT_ITEM_PER_PAGE });
-        if (response.data.length > 0) {
-            for (let i = 0; i < response.data.length; i++) {
-                const responseFull: UserItemFullResponseProps = await requestGetUserInfoFull(response.data[i].id);
-                response.data[i].enable = true;
-                response.data[i].email = responseFull.email;
+        try {
+            const response: ListUserResponse = await requestGetUserInfo({ page, limit: LIMIT_ITEM_PER_PAGE });
+            if (response.data.length > 0) {
+                for (let i = 0; i < response.data.length; i++) {
+                    const responseFull: UserItemFullResponseProps = await requestGetUserInfoFull(response.data[i].id);
+                    response.data[i].enable = true;
+                    response.data[i].email = responseFull.email;
+                }
             }
-        }
-        return {
-            totalPage: Math.ceil(response.total / LIMIT_ITEM_PER_PAGE),
-            listUsers: response.data
+            return {
+                totalPage: Math.ceil(response.total / LIMIT_ITEM_PER_PAGE),
+                listUsers: response.data
+            }
+        } catch (error) {
+            if (__DEV__) {
+                console.log('error fetch all user More', error);
+            }
+            return {
+                totalPage: 1,
+                listUsers: []
+            }
         }
     }
 );
